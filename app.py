@@ -1,3 +1,5 @@
+import re
+
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session.__init__ import Session
@@ -29,8 +31,66 @@ db = SQL("sqlite:///interesting.db")
 @app.route('/')
 @login_required
 def index():
+    """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     return render_template('index.html')
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("You must provide a username!", 403)
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("You must provide a password!", 403)
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("Your username or password were invalid!", 403)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("welcome.html")
+
+
+@app.route("/register", methods=["POST"])
+def register():
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if not request.form.get("username"):
+        return apology("You must provide a username!", 400)
+    elif not request.form.get("password"):
+        return apology("You must provide a password!", 400)
+    elif not request.form.get("email") or not (re.fullmatch(regex, request.form.get("email"))):
+        return apology("You must provide a valid email", 400)
+    x = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+    if x:
+        return apology("That username is already taken!", 400)
+    db.execute("INSERT INTO users (username, hash, email) VALUES (?, ?, ?)", request.form.get("username"),
+               generate_password_hash(request.form.get("password")), request.form.get("email"))
+    return redirect("/")
+
+
+def errorhandler(e):
+    """Handle error"""
+    if not isinstance(e, HTTPException):
+        e = InternalServerError()
+    return apology(e.name, e.code)
+
+
+# Listen for errors
+for code in default_exceptions:
+    app.errorhandler(code)(errorhandler)
 
 if __name__ == '__main__':
     app.run()
