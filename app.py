@@ -1,4 +1,5 @@
 import re
+import datetime
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -32,7 +33,9 @@ db = SQL("sqlite:///interesting.db")
 @login_required
 def index():
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
-    return render_template('index.html')
+    user_id = session["user_id"]
+    data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
+    return render_template('index.html', data=data)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -80,6 +83,18 @@ def register():
                generate_password_hash(request.form.get("password")), request.form.get("email"))
     return redirect("/")
 
+
+@app.route("/addnote", methods=["POST"])
+@login_required
+def addnote():
+    user_id = session["user_id"]
+    title = request.form.get("title")
+    note = request.form.get("note-content")
+    if not title and not note:
+        return apology("You must write a note!")
+    db.execute("INSERT INTO notes (id, title, note, time) VALUES (?,?,?,?)", user_id, title, note,
+               str(datetime.datetime.now().replace(microsecond=0)))
+    return redirect("/")
 
 def errorhandler(e):
     """Handle error"""
