@@ -1,5 +1,9 @@
+.body {
+    background-color: #94B49F;
+}
+
 .generic-div {
-    background-image: linear-gradient(to right, #e3c6f4, #c0f1ed, #fff59f, #fad3cb);
+    background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
     margin: 1% 2%;
     padding: 1%;
     border-radius: 15px;
@@ -7,8 +11,9 @@
 }
 .banner {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 350%;
-    background-image: linear-gradient(to right, #e3c6f4, #c0f1ed, #fff59f, #fad3cb);
+    font-size: 347%;
+    font-weight: bold;
+    background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
     text-align: center;
     height: 100%;
     margin: 1% 2%;
@@ -53,4 +58,86 @@
     text-align: center;
     font-size: xx-large;
     height: 75vh;
+}
+
+/* index page stuff */
+.tabs {
+    position: relative;
+    margin: 2%;
+    background: #ECB390;
+    height: 23rem;
+    border-radius: 15px;
+}
+.tabs::before,
+.tabs::after {
+  content: "";
+  display: table;
+}
+.tabs::after {
+  clear: both;
+}
+.tab {
+  float: left;
+}
+.tab-switch {
+  display: none;
+}
+.tab-label {
+  position: relative;
+  display: block;
+  line-height: 2.75em;
+  height: 3em;
+  padding: 0 1.618em;
+  background: #ECB390;
+  border-right: 0.125rem solid #FCF8E8;
+  color: #fff;
+  cursor: pointer;
+  top: 0;
+  transition: all 0.25s;
+}
+.tab-label:hover {
+  top: -0.25rem;
+  transition: top 0.25s;
+}
+.tab-content {
+    min-height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 2.75em;
+    left: 0;
+    padding: 1.618rem;
+    background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
+    color: #000;
+    border-bottom: 0.25rem solid #bdc3c7;
+    opacity: 0;
+    transition: all 0.35s;
+    border-radius: 0px 0px 15px 15px;
+}
+.tab-switch:checked + .tab-label {
+  background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
+  color: #000000;
+  border-bottom: 0;
+  border-right: 0.125rem solid #fff;
+  transition: all 0.35s;
+  z-index: 1;
+  top: -0.0625rem;
+}
+.tab-switch:checked + label + .tab-content {
+  z-index: 2;
+  opacity: 1;
+  transition: all 0.35s;
+}
+
+.title, .title:focus {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid red;
+}
+.note-content, .note-content:focus {
+    width: 100%;
+    outline: none;
+    border: none;
+    height: 100px;
 }
