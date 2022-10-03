@@ -140,3 +140,24 @@
     outline: none;
     border: none;
 }
+
+.flex-container2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.note {
+    max-height: 300px;
+    overflow: hidden;
+    border: solid 2px #ECB390;
+    flex-grow: 1;
+    margin: 1%;
+    padding: 2%;
+    background-image: none;
+    background-color:#FCF8E8;
+}
+.edit {
+    border: none;
+    float: right;
+    background-color: #FCF8E8;
+}

@@ -43,6 +43,16 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Add note...
         </button>
+
+        <div class="flex-container2">
+            {% for row in data%}
+            <div class="note generic-div">
+                <button class="edit">🖉</button>
+                <h2>{{ row.title }}</h2>
+                <pre>{{ row.note }}</pre>
+            </div>
+            {% endfor %}
+        </div>
       </div>
     </div>
 
