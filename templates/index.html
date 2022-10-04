@@ -6,7 +6,7 @@
 
 {% block main %}
     <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
   <form action="/addnote" method="post">
     <div class="modal-content">
@@ -16,6 +16,27 @@
       </div>
       <div class="modal-body">
         <textarea class="note-content" rows="10" cols="30" name="note-content" wrap="hard" placeholder="Write here..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+
+    <!-- Modal 2-->
+<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <form action="/editnote" method="post">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input class="title" id="editTitle" name="title" placeholder="Title..." type="text">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <textarea class="note-content" id="editBody" rows="10" cols="30" name="note-content" wrap="hard" placeholder="Write here..."></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -39,15 +60,16 @@
       <input type="radio" name="css-tabs" id="saved" class="tab-switch">
       <label for="saved" class="tab-label">SAVED</label>
       <div class="tab-content">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <!-- Button trigger add note modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
           Add note...
         </button>
 
         <div class="flex-container2">
             {% for row in data%}
             <div class="note generic-div">
-                <button class="edit">🖉</button>
+                <!-- Trigger edit note modal -->
+                <button class="edit" data-bs-toggle="modal" data-bs-target="#editNoteModal">🖉</button>
                 <h2>{{ row.title }}</h2>
                 <pre>{{ row.note }}</pre>
             </div>

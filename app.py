@@ -1,5 +1,6 @@
 import re
 import datetime
+import json
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -95,6 +96,23 @@ def addnote():
     db.execute("INSERT INTO notes (id, title, note, time) VALUES (?,?,?,?)", user_id, title, note,
                str(datetime.datetime.now().replace(microsecond=0)))
     return redirect("/")
+
+
+@app.route("/editnote", methods=['POST'])
+@login_required
+def editnote():
+    user_id = session["user_id"]
+    oldNote = json.loads(request.get_json())
+    note_id = db.execute("SELECT note_id FROM notes WHERE title = ? AND note = ?", oldNote["title"], oldNote["content"])[0]["note_id"]
+    # edit note
+    title = request.form.get("title")
+    note = request.form.get("note-content")
+    if not title and not note:
+        return apology("You must write a note!")
+    db.execute("UPDATE notes SET title = ?, note = ?, time = ? WHERE id = ? AND note_id = ?",
+               title, note, str(datetime.datetime.now().replace(microsecond=0)), user_id, note_id)
+    return redirect("/")
+
 
 def errorhandler(e):
     """Handle error"""

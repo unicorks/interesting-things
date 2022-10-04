@@ -161,3 +161,7 @@
     float: right;
     background-color: #FCF8E8;
 }
+
+#editBody {
+    white-space: pre;
+}
