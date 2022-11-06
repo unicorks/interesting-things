@@ -98,20 +98,14 @@ def addnote():
     return redirect("/")
 
 
-@app.route("/editnote", methods=['POST'])
+@app.route("/deletenote", methods=['POST'])
 @login_required
 def editnote():
     user_id = session["user_id"]
-    oldNote = json.loads(request.get_json())
-    note_id = db.execute("SELECT note_id FROM notes WHERE title = ? AND note = ?", oldNote["title"], oldNote["content"])[0]["note_id"]
-    # edit note
-    title = request.form.get("title")
-    note = request.form.get("note-content")
-    if not title and not note:
-        return apology("You must write a note!")
-    db.execute("UPDATE notes SET title = ?, note = ?, time = ? WHERE id = ? AND note_id = ?",
-               title, note, str(datetime.datetime.now().replace(microsecond=0)), user_id, note_id)
+    note_id = request.form.get('delete')
+    db.execute("DELETE FROM notes WHERE id= ? AND note_id= ?", user_id, note_id)
     return redirect("/")
+
 
 
 def errorhandler(e):

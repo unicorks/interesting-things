@@ -26,26 +26,6 @@
   </div>
 </div>
 
-    <!-- Modal 2-->
-<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-  <form action="/editnote" method="post">
-    <div class="modal-content">
-      <div class="modal-header">
-        <input class="title" id="editTitle" name="title" placeholder="Title..." type="text">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <textarea class="note-content" id="editBody" rows="10" cols="30" name="note-content" wrap="hard" placeholder="Write here..."></textarea>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </form>
-  </div>
-</div>
     <div class="tabs">
 
     <div class="tab">
@@ -68,8 +48,10 @@
         <div class="flex-container2">
             {% for row in data%}
             <div class="note generic-div">
-                <!-- Trigger edit note modal -->
-                <button class="edit" data-bs-toggle="modal" data-bs-target="#editNoteModal">🖉</button>
+                <form action="/deletenote" method="post">
+                    <!-- delete button -->
+                    <button type="submit" name="delete" value="{{ row.note_id }}" id="delete">🗑</button>
+                </form>
                 <h2>{{ row.title }}</h2>
                 <pre>{{ row.note }}</pre>
             </div>

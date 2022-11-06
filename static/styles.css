@@ -147,8 +147,6 @@
     justify-content: flex-start;
 }
 .note {
-    max-height: 300px;
-    overflow: hidden;
     border: solid 2px #ECB390;
     flex-grow: 1;
     margin: 1%;
@@ -156,12 +154,8 @@
     background-image: none;
     background-color:#FCF8E8;
 }
-.edit {
+#delete {
     border: none;
     float: right;
     background-color: #FCF8E8;
-}
-
-#editBody {
-    white-space: pre;
 }
