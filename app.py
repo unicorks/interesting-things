@@ -1,6 +1,5 @@
 import re
 import datetime
-import json
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -9,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import apology, login_required, bored, getquote
 
 # Configure app
 app = Flask(__name__)
@@ -36,7 +35,24 @@ def index():
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     user_id = session["user_id"]
     data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
-    return render_template('index.html', data=data)
+
+    # get question
+    question = db.execute("SELECT question FROM question ORDER BY RAND() LIMIT 1 ")
+    activity = bored()
+    quote = getquote()
+    for_you = [
+        {"type": "Bored? Do this!", "content": activity},
+        {"type": "Question", "content": question},
+        {"type": "Joke", "content": ""},
+        {"type": "Quote", "content": quote},
+        {"type": "Word", "content": ""},
+        {"type": "Fun Fact", "content": ""},
+        {"type": "Cat Fact", "content": ""},
+        {"type": "Dog Fact", "content": ""},
+        {"type": "Science Fact", "content": ""},
+        {"type": "Math Fact", "content": ""},
+    ]
+    return render_template('index.html', data=data, for_you=for_you)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
