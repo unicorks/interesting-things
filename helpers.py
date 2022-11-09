@@ -61,3 +61,33 @@ def getquote():
     except (KeyError, TypeError, ValueError):
         return "Oops, there was an error!"
 
+def getjoke():
+    # Contact API
+    try:
+        url = f"https://icanhazdadjoke.com/"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()
+        return res["joke"]
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
+def getword():
+    # Contact API
+    try:
+        url = f""
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()
+        return res["joke"]
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
