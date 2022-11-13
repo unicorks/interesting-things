@@ -45,6 +45,22 @@ def bored():
         return "Oops, there was an error!"
 
 
+def advice():
+    # Contact API
+    try:
+        url = f"https://api.adviceslip.com/advice"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()
+        return res["slip"]["advice"]
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
+
 def getquote():
     # Contact API
     try:
@@ -104,6 +120,36 @@ def getfact():
     try:
         res = response.json()
         return res["text"]
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
+def catfact():
+    # Contact API
+    try:
+        url = f"https://catfact.ninja/fact"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()
+        return res["fact"]
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
+def dogfact():
+    # Contact API
+    try:
+        url = f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()
+        return res["facts"][0]
     except (KeyError, TypeError, ValueError):
         return "Oops, there was an error!"
 

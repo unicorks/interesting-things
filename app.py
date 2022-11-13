@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, bored, getquote, getjoke, getword, getfact
+from helpers import apology, login_required, bored, advice, getquote, getjoke, getword, getfact, catfact, dogfact
 
 # Configure app
 app = Flask(__name__)
@@ -38,22 +38,24 @@ def index():
 
     # get question
     question = db.execute("SELECT question FROM questions ORDER BY RANDOM() LIMIT 1 ")[0]['question']
+    adv = advice()
     activity = bored()
     quote = getquote()
     joke = getjoke()
     word = getword()
     fact = getfact()
+    cat = catfact()
+    dog = dogfact()
     for_you = [
         {"type": "Bored? Do this!", "content": activity},
+        {"type": "A piece of advice", "content": adv},
         {"type": "Question", "content": question},
         {"type": "Joke", "content": joke},
         {"type": "Quote", "content": quote},
         {"type": "Word", "content": word},
         {"type": "Fun Fact", "content": fact},
-        {"type": "Cat Fact", "content": "todo"},
-        {"type": "Dog Fact", "content": "todo"},
-        {"type": "Science Fact", "content": "todo"},
-        {"type": "Math Fact", "content": "todo"},
+        {"type": "Cat Fact", "content": cat},
+        {"type": "Dog Fact", "content": dog},
     ]
     return render_template('index.html', data=data, for_you=for_you)
 
