@@ -65,7 +65,7 @@ def getjoke():
     # Contact API
     try:
         url = f"https://icanhazdadjoke.com/"
-        response = requests.get(url)
+        response = requests.get(url, headers={"Accept": "application/json"})
         response.raise_for_status()
     except requests.RequestException:
         return "Oops, there was an error!"
@@ -79,7 +79,23 @@ def getjoke():
 def getword():
     # Contact API
     try:
-        url = f""
+        url = f"https://random-words-api.vercel.app/word"
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.RequestException:
+        return "Oops, there was an error!"
+    # Parse response
+    try:
+        res = response.json()[0]
+        word = res["word"] + ': ' + res["definition"]
+        return word
+    except (KeyError, TypeError, ValueError):
+        return "Oops, there was an error!"
+
+def getfact():
+    # Contact API
+    try:
+        url = f"https://uselessfacts.jsph.pl/random.json?language=en"
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException:
@@ -87,7 +103,7 @@ def getword():
     # Parse response
     try:
         res = response.json()
-        return res["joke"]
+        return res["text"]
     except (KeyError, TypeError, ValueError):
         return "Oops, there was an error!"
 

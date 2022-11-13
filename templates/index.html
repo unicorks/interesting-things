@@ -33,10 +33,13 @@
       <label for="for-you" class="tab-label">FOR YOU</label>
       <div class="tab-content">
 
-          <div class="note generic-div">
-              <h2>Question of the day: </h2>
-              <p></p>
-          </div>
+          {% for line in for_you %}
+              <div class="note generic-div">
+                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ line.type }}" class="edit">🖉</button>
+                <h2>{{ line.type }}</h2>
+                <p>{{ line.content }}</p>
+            </div>
+          {% endfor %}
 
       </div>
     </div>
@@ -55,7 +58,7 @@
             <div class="note generic-div">
                 <form action="/deletenote" method="post">
                     <!-- delete button -->
-                    <button type="submit" name="delete" value="{{ row.note_id }}" id="delete">🗑</button>
+                    <button type="submit" name="delete" value="{{ row.note_id }}" class="delete">🗑</button>
                 </form>
                 <h2>{{ row.title }}</h2>
                 <pre>{{ row.note }}</pre>
@@ -73,4 +76,9 @@
       </div>
     </div>
     </div>
+
+     <script type="text/javascript" {{ url_for('static', filename='../static/script.js')}}></script>
+         <script type="text/javascript">
+            arr = stuff({{for_you|tojson}})
+         </script>
 {% endblock %}

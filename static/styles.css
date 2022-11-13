@@ -154,7 +154,7 @@
     background-image: none;
     background-color:#FCF8E8;
 }
-#delete {
+.delete, .edit {
     border: none;
     float: right;
     background-color: #FCF8E8;
