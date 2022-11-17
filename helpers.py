@@ -1,6 +1,8 @@
 from flask import redirect, render_template, request, session
 from functools import wraps
 import requests
+import aiohttp
+import asyncio
 
 def apology(message, code=400):
 
@@ -29,127 +31,21 @@ def login_required(f):
     return decorated_function
 
 
-def bored():
-    # Contact API
-    try:
-        url = f"http://www.boredapi.com/api/activity/"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        activity = response.json()
-        return activity["activity"]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
+api_calls = [f"http://www.boredapi.com/api/activity/", f"https://api.adviceslip.com/advice", f"https://api.quotable.io/random",
+             f"https://official-joke-api.appspot.com/random_joke", f"https://random-words-api.vercel.app/word", f"https://uselessfacts.jsph.pl/random.json?language=en",
+             f"https://catfact.ninja/fact", f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"]
+
+def get_tasks(session):
+    tasks = []
+    for api_call in api_calls:
+        tasks.append(session.get(api_call))
+        return tasks
 
 
-def advice():
-    # Contact API
-    try:
-        url = f"https://api.adviceslip.com/advice"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        return res["slip"]["advice"]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-
-def getquote():
-    # Contact API
-    try:
-        url = f"https://api.quotable.io/random"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        quote = res["content"] + '     - ' + res["author"]
-        return quote
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-def getjoke():
-    # Contact API
-    try:
-        url = f"https://icanhazdadjoke.com/"
-        response = requests.get(url, headers={"Accept": "application/json"})
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        return res["joke"]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-def getword():
-    # Contact API
-    try:
-        url = f"https://random-words-api.vercel.app/word"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()[0]
-        word = res["word"] + ': ' + res["definition"]
-        return word
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-def getfact():
-    # Contact API
-    try:
-        url = f"https://uselessfacts.jsph.pl/random.json?language=en"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        return res["text"]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-def catfact():
-    # Contact API
-    try:
-        url = f"https://catfact.ninja/fact"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        return res["fact"]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
-def dogfact():
-    # Contact API
-    try:
-        url = f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return "Oops, there was an error!"
-    # Parse response
-    try:
-        res = response.json()
-        return res["facts"][0]
-    except (KeyError, TypeError, ValueError):
-        return "Oops, there was an error!"
-
+res = []
+async def get_calls():
+    async with aiohttp.ClientSession() as session:
+        tasks = get_tasks(session)
+        responses = await asyncio.gather(*tasks)
+        for response in responses:
+            res.append(await response.json())

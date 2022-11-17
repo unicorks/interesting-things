@@ -1,5 +1,7 @@
 import re
 import datetime
+import asyncio
+import aiohttp
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -8,7 +10,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, bored, advice, getquote, getjoke, getword, getfact, catfact, dogfact
+from helpers import apology, login_required
 
 # Configure app
 app = Flask(__name__)
@@ -31,21 +33,40 @@ db = SQL("sqlite:///interesting.db")
 
 @app.route('/')
 @login_required
-def index():
+async def index():
+    api_calls = [f"http://www.boredapi.com/api/activity/", f"https://api.adviceslip.com/advice",
+                 f"https://api.quotable.io/random",
+                 f"https://official-joke-api.appspot.com/random_joke", f"https://random-words-api.vercel.app/word",
+                 f"https://uselessfacts.jsph.pl/random.json?language=en",
+                 f"https://catfact.ninja/fact", f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"]
+
+    def get_tasks(session):
+        tasks = []
+        for api_call in api_calls:
+            tasks.append(session.get(api_call))
+            return tasks
+
+    res = []
+    async with aiohttp.ClientSession() as session:
+        tasks = get_tasks(session)
+        responses = await asyncio.gather(*tasks)
+        for response in responses:
+            res.append(await response.json())
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     user_id = session["user_id"]
     data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
 
-    # get question
+    # get 'for you' stuff
     question = db.execute("SELECT question FROM questions ORDER BY RANDOM() LIMIT 1 ")[0]['question']
-    adv = advice()
-    activity = bored()
-    quote = getquote()
-    joke = getjoke()
-    word = getword()
-    fact = getfact()
-    cat = catfact()
-    dog = dogfact()
+    activity = res[0]["activity"]
+    adv = res[1]["slip"]["advice"]
+    quote = res[2]["content"] + '     - ' + res[2]["author"]
+    joke = res[3]["setup"] + " " + res[3]["punchline"]
+    word = res[4]["word"] + ': ' + res[4]["definition"]
+    fact = res[5]["text"]
+    cat = res[6]["fact"]
+    dog = res[7]["facts"][0]
+
     for_you = [
         {"type": "Bored? Do this!", "content": activity},
         {"type": "A piece of advice", "content": adv},
