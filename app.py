@@ -33,7 +33,7 @@ db = SQL("sqlite:///interesting.db")
 
 @app.route('/')
 @login_required
-async def index():
+def index():
     api_calls = [f"http://www.boredapi.com/api/activity/", f"https://api.adviceslip.com/advice",
                  f"https://api.quotable.io/random",
                  f"https://official-joke-api.appspot.com/random_joke", f"https://random-words-api.vercel.app/word",
@@ -47,11 +47,16 @@ async def index():
             return tasks
 
     res = []
-    async with aiohttp.ClientSession() as session:
-        tasks = get_tasks(session)
-        responses = await asyncio.gather(*tasks)
-        for response in responses:
-            res.append(await response.json())
+    async def get_calls():
+        async with aiohttp.ClientSession() as session:
+            tasks = get_tasks(session)
+            responses = await asyncio.gather(*tasks)
+            for response in responses:
+                res.append(await response.json())
+
+    asyncio.run(get_calls())
+    print(res)
+
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     user_id = session["user_id"]
     data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
