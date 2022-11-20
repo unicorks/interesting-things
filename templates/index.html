@@ -19,7 +19,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary" id="savenote" value="">Save changes</button>
       </div>
     </div>
   </form>
@@ -35,7 +35,7 @@
 
           {% for line in for_you %}
               <div class="note generic-div">
-                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ line.type }}" class="edit">🖉</button>
+                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ line.type }}" class="add">🖉</button>
                 <h2>{{ line.type }}</h2>
                 <p>{{ line.content }}</p>
             </div>
@@ -56,6 +56,7 @@
         <div class="flex-container2">
             {% for row in data%}
             <div class="note generic-div">
+                <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ row.note_id }}" class="edit">🖉</button>
                 <form action="/deletenote" method="post">
                     <!-- delete button -->
                     <button type="submit" name="delete" value="{{ row.note_id }}" class="delete">🗑</button>
@@ -80,5 +81,6 @@
      <script type="text/javascript" {{ url_for('static', filename='../static/script.js')}}></script>
          <script type="text/javascript">
             arr = stuff({{for_you|tojson}})
+            ee = stuff2({{data|tojson}})
          </script>
 {% endblock %}

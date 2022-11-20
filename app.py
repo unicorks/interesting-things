@@ -38,24 +38,20 @@ def index():
                  f"https://api.quotable.io/random",
                  f"https://official-joke-api.appspot.com/random_joke", f"https://random-words-api.vercel.app/word",
                  f"https://uselessfacts.jsph.pl/random.json?language=en",
-                 f"https://catfact.ninja/fact", f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"]
-
-    def get_tasks(session):
-        tasks = []
-        for api_call in api_calls:
-            tasks.append(session.get(api_call))
-            return tasks
-
+                 f"https://catfact.ninja/fact"]
     res = []
-    async def get_calls():
+    async def main():
         async with aiohttp.ClientSession() as session:
-            tasks = get_tasks(session)
+            tasks = []
+            for api_call in api_calls:
+                task = asyncio.ensure_future(session.get(api_call))
+                tasks.append(task)
+
             responses = await asyncio.gather(*tasks)
             for response in responses:
-                res.append(await response.json())
+                res.append(await response.json(content_type=None))
 
-    asyncio.run(get_calls())
-    print(res)
+    asyncio.run(main())
 
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     user_id = session["user_id"]
@@ -67,10 +63,10 @@ def index():
     adv = res[1]["slip"]["advice"]
     quote = res[2]["content"] + '     - ' + res[2]["author"]
     joke = res[3]["setup"] + " " + res[3]["punchline"]
-    word = res[4]["word"] + ': ' + res[4]["definition"]
+    word = res[4][0]["word"] + ': ' + res[4][0]["definition"]
     fact = res[5]["text"]
     cat = res[6]["fact"]
-    dog = res[7]["facts"][0]
+    dog = "ded"
 
     for_you = [
         {"type": "Bored? Do this!", "content": activity},
@@ -138,6 +134,10 @@ def addnote():
     user_id = session["user_id"]
     title = request.form.get("title")
     note = request.form.get("note-content")
+    note_id = request.form.get('savenote')
+    print(note_id)
+    if note_id:
+        db.execute("DELETE FROM notes WHERE id= ? AND note_id= ?", user_id, note_id)
     if not title and not note:
         return apology("You must write a note!")
     db.execute("INSERT INTO notes (id, title, note, time) VALUES (?,?,?,?)", user_id, title, note,

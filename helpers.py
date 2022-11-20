@@ -1,8 +1,5 @@
 from flask import redirect, render_template, request, session
 from functools import wraps
-import requests
-import aiohttp
-import asyncio
 
 def apology(message, code=400):
 
@@ -29,23 +26,3 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
-
-
-api_calls = [f"http://www.boredapi.com/api/activity/", f"https://api.adviceslip.com/advice", f"https://api.quotable.io/random",
-             f"https://official-joke-api.appspot.com/random_joke", f"https://random-words-api.vercel.app/word", f"https://uselessfacts.jsph.pl/random.json?language=en",
-             f"https://catfact.ninja/fact", f"https://www.dogfactsapi.ducnguyen.dev/api/v1/facts/?number=1"]
-
-def get_tasks(session):
-    tasks = []
-    for api_call in api_calls:
-        tasks.append(session.get(api_call))
-        return tasks
-
-
-res = []
-async def get_calls():
-    async with aiohttp.ClientSession() as session:
-        tasks = get_tasks(session)
-        responses = await asyncio.gather(*tasks)
-        for response in responses:
-            res.append(await response.json())
