@@ -7,6 +7,9 @@ function stuff2(vars) {
             return vars
         }
 window.addEventListener('load', function(){
+    // clear an old value (for add/edit note)
+    document.getElementById('savenote').value = "";
+
         let addButtons = document.querySelectorAll(".add")
         // put values in addnote modal on click (for you section)
         addButtons.forEach(function(elem) {
@@ -29,7 +32,6 @@ window.addEventListener('load', function(){
                 let value = eleme.value;
                 for(let i = 0; i < ee.length; i += 1) {
                     if (parseInt(ee[i]["note_id"]) === parseInt(value)) {
-                        console.log("if works")
                         document.querySelector('.title').value = ee[i]["title"];
                         document.querySelector('textarea').value = ee[i]["note"];
                         document.getElementById('savenote').value = value;

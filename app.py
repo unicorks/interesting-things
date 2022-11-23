@@ -56,6 +56,7 @@ def index():
     """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
     user_id = session["user_id"]
     data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
+    data.reverse()  # for arranging notes by latest time
 
     # get 'for you' stuff
     question = db.execute("SELECT question FROM questions ORDER BY RANDOM() LIMIT 1 ")[0]['question']
