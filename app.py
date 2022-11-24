@@ -155,6 +155,10 @@ def editnote():
     return redirect("/")
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 
 def errorhandler(e):
     """Handle error"""
