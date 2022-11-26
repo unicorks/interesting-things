@@ -29,26 +29,35 @@
     <div class="tabs">
 
     <div class="tab">
-      <input type="radio" name="css-tabs" id="for-you" checked class="tab-switch">
+      <input type="radio" name="css-tabs" id="for-you" class="tab-switch">
         <label for="for-you" class="tab-label"><a href="/">FOR YOU</a></label>
-      <div class="tab-content flex-container2">
-
-          {% for line in for_you %}
-              <div class="note generic-div">
-                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ line.type }}" class="add">🖉</button>
-                <h2>{{ line.type }}</h2>
-                <p>{{ line.content }}</p>
-            </div>
-          {% endfor %}
-
+      <div class="tab-content">
+          <a href="/">Find something interesting for you</a>
       </div>
     </div>
 
     <div class="tab">
-      <input type="radio" name="css-tabs" id="saved" class="tab-switch">
+      <input type="radio" name="css-tabs" id="saved" checked class="tab-switch">
         <label for="saved" class="tab-label"><a href="/saved">SAVED</a></label>
       <div class="tab-content">
-        <a href="/saved">See your notes</a>
+        <!-- Button trigger add note modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+          Add note...
+        </button>
+
+        <div class="flex-container2">
+            {% for row in data%}
+            <div class="note generic-div">
+                <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ row.note_id }}" class="edit">🖉</button>
+                <form action="/deletenote" method="post">
+                    <!-- delete button -->
+                    <button type="submit" name="delete" value="{{ row.note_id }}" class="delete">🗑</button>
+                </form>
+                <h2>{{ row.title }}</h2>
+                <pre>{{ row.note }}</pre>
+            </div>
+            {% endfor %}
+        </div>
       </div>
     </div>
 
@@ -63,6 +72,6 @@
 
      <script type="text/javascript" {{ url_for('static', filename='../static/script.js')}}></script>
          <script type="text/javascript">
-            arr = stuff({{for_you|tojson}})
+            ee = stuff2({{data|tojson}})
          </script>
 {% endblock %}

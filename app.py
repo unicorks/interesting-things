@@ -53,11 +53,6 @@ def index():
 
     asyncio.run(main())
 
-    """ SHOW HOME SCREEN + NOTES TAKEN BY USER """
-    user_id = session["user_id"]
-    data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
-    data.reverse()  # for arranging notes by latest time
-
     # get 'for you' stuff
     question = db.execute("SELECT question FROM questions ORDER BY RANDOM() LIMIT 1 ")[0]['question']
     activity = res[0]["activity"]
@@ -67,7 +62,6 @@ def index():
     word = res[4][0]["word"] + ': ' + res[4][0]["definition"]
     fact = res[5]["text"]
     cat = res[6]["fact"]
-    dog = "ded"
 
     for_you = [
         {"type": "Bored? Do this!", "content": activity},
@@ -78,9 +72,19 @@ def index():
         {"type": "Word", "content": word},
         {"type": "Fun Fact", "content": fact},
         {"type": "Cat Fact", "content": cat},
-        {"type": "Dog Fact", "content": dog},
     ]
-    return render_template('index.html', data=data, for_you=for_you)
+    return render_template('index.html', for_you=for_you)
+
+
+@app.route('/saved')
+@login_required
+def saved():
+    """ SHOW NOTES TAKEN BY USER """
+    user_id = session["user_id"]
+    data = db.execute("SELECT * FROM notes WHERE id = ?", user_id)
+    data.reverse()  # for arranging notes by latest time
+    return render_template('saved.html', data=data)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -110,6 +114,7 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("welcome.html")
+
 
 
 @app.route("/register", methods=["POST"])
@@ -143,7 +148,7 @@ def addnote():
         return apology("You must write a note!")
     db.execute("INSERT INTO notes (id, title, note, time) VALUES (?,?,?,?)", user_id, title, note,
                str(datetime.datetime.now().replace(microsecond=0)))
-    return redirect("/")
+    return redirect("/saved")
 
 
 @app.route("/deletenote", methods=['POST'])
@@ -152,7 +157,7 @@ def editnote():
     user_id = session["user_id"]
     note_id = request.form.get('delete')
     db.execute("DELETE FROM notes WHERE id= ? AND note_id= ?", user_id, note_id)
-    return redirect("/")
+    return redirect("/saved")
 
 
 @app.route("/logout")
