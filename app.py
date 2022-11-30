@@ -4,7 +4,7 @@ import asyncio
 import aiohttp
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session.__init__ import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -158,6 +158,13 @@ def editnote():
     note_id = request.form.get('delete')
     db.execute("DELETE FROM notes WHERE id= ? AND note_id= ?", user_id, note_id)
     return redirect("/saved")
+
+
+@app.route("/search")
+def search():
+    query = "%" + request.args.get("q") + "%"
+    results = db.execute("SELECT * FROM notes WHERE title LIKE ? OR note LIKE ?", query, query)
+    return jsonify(results)
 
 
 @app.route("/logout")

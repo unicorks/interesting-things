@@ -14,8 +14,8 @@
 </head>
 <body class="body">
     <div class="menu">
-        {% if session.id %}
-        <a href="/logout">Log out</a>
+        {% if session.user_id %}
+            <a href="/logout">Log out</a>
         {% else %}
         <a href="#login">Log in</a>
         {% endif %}
