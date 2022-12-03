@@ -39,4 +39,32 @@ window.addEventListener('load', function(){
                 }
             })
         })
+
+        // search note
+        let input = document.querySelector('.search');
+            input.addEventListener('keyup', function() {
+                $.get('/search?q=' + input.value, function(notes) {
+                  let html = '';
+                  for (let i = 0; i < notes.length; i++)
+                  {
+                      let title = notes[i].title
+                      let note = notes[i].note
+                      let id = notes[i].id
+
+                      html += `<div class="note generic-div">
+                                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="${id}" class="edit">🖉</button>
+                                    <form action="/deletenote" method="post">
+                                    <!-- delete button -->
+                                    <button type="submit" name="delete" value="${id}" class="delete">🗑</button>
+                                    </form>
+                                    <h2>${title}</h2>
+                                    <pre>${note}</pre>
+                                    </div>`
+
+                  }
+
+                  document.querySelector('.flex-container2').innerHTML = html;
+                });
+            });
+
     })

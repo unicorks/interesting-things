@@ -13,13 +13,6 @@
     <title>Interesting Things: {% block title %}{% endblock %}</title>
 </head>
 <body class="body">
-    <div class="menu">
-        {% if session.user_id %}
-            <a href="/logout">Log out</a>
-        {% else %}
-        <a href="#login">Log in</a>
-        {% endif %}
-    </div>
     <div class="banner">
         Interesting Things
     </div>

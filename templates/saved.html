@@ -40,10 +40,13 @@
       <input type="radio" name="css-tabs" id="saved" checked class="tab-switch">
         <label for="saved" class="tab-label"><a href="/saved">SAVED</a></label>
       <div class="tab-content">
-        <!-- Button trigger add note modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
-          Add note...
-        </button>
+
+        <div class="flex-container3">
+            <!-- Button trigger add note modal -->
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addNoteModal">➕</button>
+            <input autocomplete="off" placeholder="Search..." type="search" class="search">
+            <button type="button" class="btn btn-outline-secondary" formaction="/settings">⚙</button>
+        </div>
 
         <div class="flex-container2">
             {% for row in data%}

@@ -162,9 +162,14 @@ def editnote():
 
 @app.route("/search")
 def search():
+    user_id = session["user_id"]
     query = "%" + request.args.get("q") + "%"
-    results = db.execute("SELECT * FROM notes WHERE title LIKE ? OR note LIKE ?", query, query)
+    results = db.execute("SELECT * FROM notes WHERE id= ? AND (title LIKE ? OR note LIKE ?)", user_id, query, query)
     return jsonify(results)
+
+@app.route("/settings")
+def settings():
+    return "todo"
 
 
 @app.route("/logout")
