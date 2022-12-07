@@ -1,7 +1,7 @@
 {%  extends "layout.html" %}
 
 {% block title %}
-    Home
+    Explore
 {% endblock %}
 
 {% block main %}
@@ -29,18 +29,9 @@
     <div class="tabs">
 
     <div class="tab">
-      <input type="radio" name="css-tabs" id="for-you" checked class="tab-switch">
+      <input type="radio" name="css-tabs" id="for-you" class="tab-switch">
         <label for="for-you" class="tab-label"><a href="/">FOR YOU</a></label>
-      <div class="tab-content flex-container2">
-
-          {% for line in for_you %}
-              <div class="note generic-div">
-                    <button data-bs-toggle="modal" data-bs-target="#addNoteModal" value="{{ line.type }}" class="add">🖉</button>
-                <h2>{{ line.type }}</h2>
-                <p>{{ line.content }}</p>
-            </div>
-          {% endfor %}
-
+      <div class="tab-content">
       </div>
     </div>
 
@@ -53,7 +44,7 @@
     </div>
 
     <div class="tab">
-      <input type="radio" name="css-tabs" id="explore" class="tab-switch">
+      <input type="radio" name="css-tabs" id="explore" checked class="tab-switch">
         <label for="explore" class="tab-label"><a href="/explore">EXPLORE</a></label>
       <div class="tab-content">
           ** TODO: Think of something interesting for here. **

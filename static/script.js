@@ -63,7 +63,7 @@ window.addEventListener('load', function(){
 
                   }
 
-                  document.querySelector('.flex-container2').innerHTML = html;
+                  document.querySelector('flex-container2').innerHTML = html;
                 });
             });
 

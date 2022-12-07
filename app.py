@@ -169,7 +169,7 @@ def search():
 
 @app.route("/settings")
 def settings():
-    return "todo"
+    return render_template("settings.html")
 
 
 @app.route("/logout")

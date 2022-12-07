@@ -4,7 +4,7 @@
 
 .generic-div {
     background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
-    margin: 1% 2%;
+    margin: 10px 2%;
     padding: 1%;
     border-radius: 15px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -66,7 +66,8 @@
     position: relative;
     margin: 2%;
     background: #ECB390;
-    height: 23rem;
+    min-height: 23rem;
+    height: auto;
     border-radius: 15px;
 }
 .tabs::before,
@@ -113,7 +114,7 @@
     border-bottom: 0.25rem solid #bdc3c7;
     opacity: 0;
     transition: all 0.35s;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 0 0 15px 15px;
 }
 .tab-switch:checked + .tab-label {
   background-image: linear-gradient(to right, #FCF8E8, #CEE5D0);
@@ -152,7 +153,7 @@
     overflow: hidden;
     border: solid 2px #ECB390;
     flex-grow: 1;
-    margin: 1%;
+    gap: 10px;
     padding: 2%;
     background-image: none;
     background-color:#FCF8E8;
@@ -185,6 +186,11 @@ a {
     outline: none;
     border-color: #94B49F;
 }
-.flex-container3 button {
-    flex-grow: 0;
+.flex-container3 button:hover {
+    background-color: #94B49F !important;
+}
+
+footer a {
+    color: inherit !important;
+    text-decoration-color: inherit !important;
 }
