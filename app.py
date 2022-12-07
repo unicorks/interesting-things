@@ -171,6 +171,10 @@ def search():
 def settings():
     return render_template("settings.html")
 
+@app.route("/explore")
+def explore():
+    return render_template("explore.html")
+
 
 @app.route("/logout")
 def logout():
