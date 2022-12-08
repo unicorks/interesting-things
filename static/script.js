@@ -45,7 +45,7 @@ window.addEventListener('load', function(){
             input.addEventListener('keyup', function() {
                 $.get('/search?q=' + input.value, function(notes) {
                   let html = '';
-                  for (let i = 0; i < notes.length; i++)
+                  for (let i = notes.length - 1; i >= 0; i--)
                   {
                       let title = notes[i].title
                       let note = notes[i].note
@@ -63,7 +63,7 @@ window.addEventListener('load', function(){
 
                   }
 
-                  document.querySelector('flex-container2').innerHTML = html;
+                  document.querySelector('.flex-container2').innerHTML = html;
                 });
             });
 
